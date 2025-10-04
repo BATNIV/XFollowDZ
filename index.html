@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XFollowDZ - رشق وشحن</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+<h1>XFollowDZ</h1>
+<nav class="nav">
+<button onclick="showSection('order')">الرئيسية</button>
+<button onclick="showSection('wallet')">شحن رصيد</button>
+<button onclick="showSection('orders')">طلباتي</button>
+<button onclick="showSection('profile')">حسابي</button>
+<button onclick="showAdminLogin()">لوحة الإدارة</button>
+</nav>
+</header>
+
+<main class="container">
+
+<section id="authSection" class="panel">
+<h2>إنشاء حساب / تسجيل دخول</h2>
+<div class="authGrid">
+<div>
+<h3>إنشاء حساب</h3>
+<input id="regUser" placeholder="اسم المستخدم">
+<input id="regPass" type="password" placeholder="كلمة المرور">
+<input id="regPhone" placeholder="رقم واتساب">
+<button class="btn" onclick="registerUser()">تسجيل</button>
+</div>
+<div>
+<h3>تسجيل الدخول</h3>
+<input id="loginUser" placeholder="اسم المستخدم">
+<input id="loginPass" type="password" placeholder="كلمة المرور">
+<button class="btn" onclick="loginUser()">دخول</button>
+</div>
+</div>
+</section>
+
+<section id="orderSection" class="panel" style="display:none;">
+<h2>خدمات سوشيال ميديا</h2>
+<div class="services" id="servicesContainer"></div>
+<div id="invoice" class="invoice" style="display:none;">
+<h3>📄 فاتورتك</h3>
+<p>الخدمات: <span id="invService"></span></p>
+<p>الكميات: <span id="invQuantity"></span></p>
+<p>الإجمالي: <strong id="invTotal">0.00</strong> $</p>
+<button class="btn" onclick="placeOrder()">تأكيد الطلب</button>
+</div>
+</section>
+
+<section id="walletSection" class="panel" style="display:none;">
+<h2>💰 شحن رصيدك</h2>
+<label>أدخل معرف الطلب:</label>
+<input id="topupOrderID" type="text" placeholder="رقم الطلب">
+<button class="btn" onclick="verifyTopup()">تحقق</button>
+
+<div id="paymentBox" style="display:none;">
+<p>رقم الدفع: <span id="payID">---</span></p>
+<p>المبلغ: <span id="payAmount">---</span> USDT</p>
+<p>طريقة الدفع: <span id="payMethod">---</span></p>
+<button class="btn" onclick="copyPayID()">نسخ رقم الدفع</button>
+</div>
+<p id="payStatus"></p>
+</section>
+
+<section id="ordersSection" class="panel" style="display:none;">
+<h2>📦 طلباتي</h2>
+<div id="ordersList"></div>
+</section>
+
+<section id="profileSection" class="panel" style="display:none;">
+<h2>👤 حسابي</h2>
+<p>اسم المستخدم: <strong id="profileName">غير مسجل</strong></p>
+<p>رصيد: <strong id="profileBal">0.00</strong> USDT</p>
+<div class="row">
+<button class="btn" onclick="logout()">تسجيل الخروج</button>
+</div>
+</section>
+
+<section id="adminLoginSection" class="panel" style="display:none;">
+<h2>🔑 دخول الأدمين</h2>
+<input id="adminUser" placeholder="أسم الأدمين">
+<input id="adminPass" type="password" placeholder="كلمة المرور">
+<div class="row">
+<button class="btn" onclick="loginAdmin()">دخول</button>
+<button class="btn muted" onclick="closeAdminLogin()">إلغاء</button>
+</div>
+</section>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
