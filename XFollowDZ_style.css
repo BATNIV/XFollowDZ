@@ -1,0 +1,170 @@
+
+:root{
+  --bg:#000;
+  --panel:#1a1a1a;
+  --accent:#ff007f;
+  --accent-dark:#e60073;
+  --text:#fff;
+  --muted:#bdbdbd;
+}
+
+/* عام */
+body{
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+}
+.container{
+  width:90%;
+  max-width:1100px;
+  margin:auto;
+}
+
+/* Header */
+.site-header{
+  background:var(--bg);
+  padding:18px 0;
+  border-bottom:3px solid var(--accent);
+}
+.header-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.brand h1{
+  color:var(--accent);
+  margin:0;
+  font-size:1.8rem;
+}
+.tagline{
+  color:var(--muted);
+  margin:4px 0 0;
+  font-size:0.9rem;
+}
+.nav-list{
+  list-style:none;
+  display:flex;
+  gap:16px;
+  margin:0;
+  padding:0;
+}
+.nav-list a{
+  text-decoration:none;
+  color:var(--accent);
+  font-weight:600;
+}
+.nav-list a:hover{
+  color:var(--text);
+}
+
+/* Hero */
+.hero{
+  text-align:center;
+  padding:40px 0;
+}
+.hero h2{
+  font-size:2rem;
+  margin-bottom:8px;
+  color:var(--accent);
+}
+.hero p{
+  color:var(--muted);
+  margin-bottom:18px;
+}
+.btn-primary{
+  background:var(--accent);
+  padding:10px 20px;
+  border-radius:8px;
+  color:#fff;
+  text-decoration:none;
+  font-weight:700;
+}
+.btn-primary:hover{
+  background:var(--accent-dark);
+}
+
+/* Services Grid */
+.services-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:20px;
+  padding:30px 0;
+}
+
+/* بطاقة خدمة */
+.service-card{
+  background:var(--panel);
+  border:2px solid rgba(255,0,127,0.12);
+  border-radius:12px;
+  padding:18px;
+  text-align:center;
+  transition:transform .2s;
+}
+.service-card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 10px 30px rgba(255,0,127,0.08);
+}
+.icon-wrap{
+  width:72px;
+  height:72px;
+  margin:0 auto 12px;
+  background:rgba(255,0,127,0.05);
+  display:grid;
+  place-items:center;
+  border-radius:18px;
+}
+.icon{
+  width:36px;
+  height:36px;
+  fill:var(--accent);
+}
+.service-card h3{
+  color:var(--accent);
+  margin:6px 0;
+}
+.service-card .desc{
+  color:var(--muted);
+  margin:8px 0;
+}
+.service-card .price{
+  color:var(--text);
+  font-weight:700;
+  margin:10px 0;
+}
+.btn-order{
+  background:var(--accent);
+  border:none;
+  padding:10px 16px;
+  border-radius:8px;
+  color:#fff;
+  cursor:pointer;
+  font-weight:700;
+}
+.btn-order:hover{
+  background:var(--accent-dark);
+}
+
+/* Footer */
+.site-footer{
+  padding:20px 0;
+  text-align:center;
+  border-top:2px solid rgba(255,0,127,0.08);
+  color:var(--muted);
+}
+
+/* Responsive */
+@media (max-width:780px){
+  .nav-list{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    background:transparent;
+    margin-top:10px;
+  }
+  .hero h2{
+    font-size:1.5rem;
+  }
+}
