@@ -1,0 +1,22 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة الإدارة</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header><h1>لوحة إدارة XFollowDZ</h1></header>
+<main class="container">
+<h2>تأكيد الطلبات وشحن الرصيد</h2>
+<input type="text" id="orderID" placeholder="رقم الطلب">
+<button onclick="confirmOrder()">تأكيد الطلب</button>
+<div id="output"></div>
+</main>
+<script>
+function confirmOrder(){
+    const id=document.getElementById('orderID').value;
+    if(id.trim()===''){alert('أدخل رقم الطلب');return;}
+    document.getElementById('output').innerText='تم التحقق وشحن الطلب: '+id;
+}
+</script>
+</body>
+</html>
