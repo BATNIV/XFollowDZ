@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>XFollowDZ - Admin Panel</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>لوحة إدارة XFollowDZ</h1>
+  <nav class="nav">
+    <button onclick="goHome()">واجهة المستخدم</button>
+    <button onclick="logoutAdmin()">خروج</button>
+  </nav>
+</header>
+
+<main class="container">
+  <section class="panel">
+    <h2>طلبات الشحن</h2>
+    <div id="adminTopups"></div>
+  </section>
+
+  <section class="panel">
+    <h2>طلبات الخدمات</h2>
+    <div id="adminOrders"></div>
+  </section>
+</main>
+
+<footer class="panel muted">إدارة محلية - تخزين في LocalStorage</footer>
+
+<script>
+function goHome(){ window.open('index.html','_self'); }
+
+function renderTopups(){
+  const topups = JSON.parse(localStorage.getItem('fast10Topups')||'[]');
+  const el = document.getElementById('adminTopups');
+  if(topups.length===0){ el.innerHTML='<div>لا توجد طلبات شحن</div>'; return; }
+  el.innerHTML = topups.map((t,i)=>`<div class="adminItem">
+    <div><strong>${t.order}</strong> - ${t.amount} USDT - ${t.method} - <em>${t.status}</em></div>
+    <div class="row"><button class="btn" onclick="confirmTopup(${i})">تأكيد الشحن</button><button class="btn muted" onclick="rejectTopup(${i})">رفض</button></div>
+  </div>`).join('');
+}
+
+function renderOrders(){
+  const orders = JSON.parse(localStorage.getItem('fast10Orders')||'[]');
+  const el = document.getElementById('adminOrders');
+  if(orders.length===0){ el.innerHTML='<div>لا توجد طلبات خدمات</div>'; return; }
+  el.innerHTML = orders.map((o,i)=>`<div class="adminItem">
+    <div><strong>${o.id}</strong> - ${o.user} - ${o.service} - ${o.qty} - ${o.total}$ - <em>${o.status}</em></div>
+    <div class="row">
+      <button class="btn" onclick="acceptOrder(${i})">✅ قبول</button>
+      <button class="btn muted" onclick="rejectOrder(${i})">❌ رفض</button>
+    </div>
+  </div>`).join('');
+}
+
+function confirmTopup(i){
+  let topups = JSON.parse(localStorage.getItem('fast10Topups')||'[]');
+  topups[i].status = 'تم التأكيد';
+  localStorage.setItem('fast10Topups', JSON.stringify(topups));
+  if(topups[i].user){
+    const key = 'balance_' + topups[i].user;
+    let b = parseFloat(localStorage.getItem(key)||'0') || 0;
+    b += parseFloat(topups[i].amount);
+    localStorage.setItem(key, b.toFixed(2));
+  }
+  renderTopups();
+  alert('تم تأكيد الشحنة');
+}
+
+function rejectTopup(i){
+  let topups = JSON.parse(localStorage.getItem('fast10Topups')||'[]');
+  topups[i].status = 'مرفوض';
+  localStorage.setItem('fast10Topups', JSON.stringify(topups));
+  renderTopups();
+}
+
+function acceptOrder(i){
+  let orders = JSON.parse(localStorage.getItem('fast10Orders')||'[]');
+  orders[i].status = 'تم القبول';
+  localStorage.setItem('fast10Orders', JSON.stringify(orders));
+  renderOrders();
+  alert('تم قبول الطلب');
+}
+
+function rejectOrder(i){
+  let orders = JSON.parse(localStorage.getItem('fast10Orders')||'[]');
+  orders[i].status = 'مرفوض';
+  localStorage.setItem('fast10Orders', JSON.stringify(orders));
+  renderOrders();
+  alert('تم رفض الطلب');
+}
+
+function logoutAdmin(){ window.open('index.html','_self'); }
+
+renderTopups();
+renderOrders();
+</script>
+</body>
+</html>

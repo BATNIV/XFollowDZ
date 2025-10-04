@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>XFollowDZ - رشق وشحن</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>XFollowDZ</h1>
+  <nav class="nav">
+    <button onclick="showSection('order')">الرئيسية</button>
+    <button onclick="showSection('wallet')">شحن رصيد</button>
+    <button onclick="showSection('orders')">طلباتي</button>
+    <button onclick="showSection('profile')">حسابي</button>
+    <button onclick="showAdminLogin()">لوحة الإدارة</button>
+  </nav>
+</header>
+
+<main class="container">
+
+  <!-- Auth -->
+  <section id="authSection" class="panel">
+    <h2>إنشاء حساب / تسجيل دخول</h2>
+    <div class="authGrid">
+      <div>
+        <h3>إنشاء حساب</h3>
+        <input id="regUser" placeholder="اسم المستخدم">
+        <input id="regPass" type="password" placeholder="كلمة المرور">
+        <input id="regPhone" placeholder="رقم واتساب (مثال: 213XXXXXXXXX)">
+        <button class="btn" onclick="registerUser()">تسجيل</button>
+      </div>
+      <div>
+        <h3>تسجيل الدخول</h3>
+        <input id="loginUser" placeholder="اسم المستخدم">
+        <input id="loginPass" type="password" placeholder="كلمة المرور">
+        <button class="btn" onclick="loginUser()">دخول</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services / Order -->
+  <section id="orderSection" class="panel" style="display:none;">
+    <h2>خدمات سوشيال ميديا</h2>
+    <div class="balanceRow">
+      <div>رصيدك الحالي: <strong id="balanceDisplay">0.00</strong> USDT</div>
+      <div><button class="btn" onclick="showSection('wallet')">شحن الآن</button></div>
+    </div>
+
+    <div class="services" id="servicesContainer"></div>
+
+    <div id="invoice" class="invoice" style="display:none;">
+      <h3>📄 فاتورتك</h3>
+      <p>الخدمات: <span id="invService"></span></p>
+      <p>الكميات: <span id="invQuantity"></span></p>
+      <p>الإجمالي: <strong id="invTotal">0.00</strong> $</p>
+      <div class="row">
+        <button class="btn" onclick="placeOrder()">تأكيد الطلب</button>
+        <button class="btn muted" onclick="clearSelections()">إفراغ</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wallet / Topup -->
+  <section id="walletSection" class="panel" style="display:none;">
+    <h2>💰 شحن رصيدك</h2>
+    <p>رصيدك الحالي: <strong id="walletBalance">0.00</strong> USDT</p>
+
+    <label>المبلغ</label>
+    <input id="topupAmount" type="number" min="1" placeholder="ادخل المبلغ (USDT)">
+    <label>طريقة الدفع</label>
+    <select id="topupMethod" onchange="updatePayInfo()">
+      <option value="">اختر</option>
+      <option value="binance">Binance Pay</option>
+      <option value="payeer">Payeer</option>
+      <option value="poste">البريد (CCP)</option>
+    </select>
+
+    <div id="paymentBox" style="display:none;" class="paymentBox">
+      <p>رقم الدفع: <span id="payID">---</span></p>
+      <p>رقم الطلب: <span id="topupOrderID">---</span></p>
+      <button class="btn" onclick="copyPayID()">نسخ رقم الدفع</button>
+    </div>
+
+    <div class="row" style="margin-top:12px">
+      <button class="btn" onclick="makeTopUpRequest()">إنشاء طلب شحن</button>
+      <button class="btn muted" onclick="showSection('orders')">مشاهدة طلباتي</button>
+    </div>
+
+    <div style="margin-top:10px">
+      <h4>طلبات الشحن السابقة</h4>
+      <div id="topupList"></div>
+    </div>
+  </section>
+
+  <!-- Orders Page -->
+  <section id="ordersSection" class="panel" style="display:none;">
+    <h2>📦 طلباتي</h2>
+    <div id="ordersList"></div>
+  </section>
+
+  <!-- Profile -->
+  <section id="profileSection" class="panel" style="display:none;">
+    <h2>👤 حسابي</h2>
+    <p>اسم المستخدم: <strong id="profileName">غير مسجل</strong></p>
+    <p>رصيد: <strong id="profileBal">0.00</strong> USDT</p>
+    <div class="row">
+      <button class="btn" onclick="logout()">تسجيل الخروج</button>
+    </div>
+  </section>
+
+  <!-- Admin Login Modal -->
+  <section id="adminLoginSection" class="panel" style="display:none;">
+    <h2>🔑 دخول الأدمين</h2>
+    <input id="adminUser" placeholder="أسم الأدمين">
+    <input id="adminPass" type="password" placeholder="كلمة المرور">
+    <div class="row">
+      <button class="btn" onclick="loginAdmin()">دخول</button>
+      <button class="btn muted" onclick="closeAdminLogin()">إلغاء</button>
+    </div>
+  </section>
+
+</main>
+
+<footer class="panel muted">
+  © XFollowDZ — نسخة تجريبية. للنسخة الحقيقية ربط بقاعدة بيانات وبوابات دفع مطلوب.
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
