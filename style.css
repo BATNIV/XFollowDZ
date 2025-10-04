@@ -1,16 +1,79 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #1e1e1e;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
 
-body {background:#1e1e1e;color:#fff;font-family:sans-serif;margin:0;padding:0;}
-.nav button {background:#ff2d8f;color:#fff;border:none;padding:10px;margin:3px;border-radius:5px;cursor:pointer;}
-.panel {padding:20px;margin:15px;border:1px solid #ff2d8f;border-radius:12px;}
-.services {display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;}
-.service-card {background:#2a2a2a;padding:10px;border-radius:10px;text-align:center;color:#fff;display:flex;flex-direction:column;align-items:center;}
-.service-card .service-icon {font-size:40px;margin-bottom:10px;}
-.service-card .service-category {color:#ff2d8f;font-weight:bold;margin-bottom:5px;}
-.service-card .service-desc {font-size:14px;margin-bottom:5px;}
-.service-card .service-count {margin-bottom:5px;}
-.service-card .service-link {color:#ff2d8f;text-decoration:none;margin-bottom:5px;}
-.service-card .service-cost {color:#ff2d8f;font-weight:bold;margin-top:5px;}
-input, select {width:90%;padding:5px;margin:5px 0;border-radius:5px;border:1px solid #555;background:#1e1e1e;color:#fff;}
-.btn {background:#ff2d8f;color:#fff;padding:8px;border:none;border-radius:5px;cursor:pointer;}
-.row {display:flex;gap:10px;margin-top:10px;}
-.invoice {background:#2a2a2a;padding:10px;border-radius:10px;margin-top:10px;}
+header {
+  background: #ff2d95;
+  padding: 10px;
+  text-align: center;
+}
+
+.nav button {
+  margin: 5px;
+  padding: 8px 15px;
+  background: #fff;
+  color: #ff2d95;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.panel {
+  padding: 20px;
+  margin: 10px auto;
+  background-color: #2c2c2c;
+  border-radius: 10px;
+  max-width: 900px;
+}
+
+.service-card {
+  background-color: #3c3c3c;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 10px;
+  text-align: center;
+  display: inline-block;
+  width: 200px;
+  vertical-align: top;
+}
+
+.service-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+  color: #ff2d95;
+}
+
+.service-category {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.service-desc, .service-count, .service-link, .service-cost {
+  margin-bottom: 5px;
+}
+
+.service-link {
+  display: inline-block;
+  padding: 5px 10px;
+  background: #ff2d95;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.btn {
+  padding: 8px 12px;
+  background: #ff2d95;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn.muted {
+  background: #555;
+}
