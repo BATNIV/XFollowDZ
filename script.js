@@ -1,48 +1,164 @@
-let users = [];
-let currentUser = null;
-
-function showSection(sectionId){
-  document.querySelectorAll('.panel').forEach(sec=> sec.style.display='none');
-  if(sectionId==='order') document.getElementById('orderSection').style.display='block';
-  if(sectionId==='wallet') document.getElementById('walletSection').style.display='block';
-  if(sectionId==='orders') document.getElementById('ordersSection').style.display='block';
-  if(sectionId==='profile') document.getElementById('profileSection').style.display='block';
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-function registerUser(){
-  let u=document.getElementById('regUser').value;
-  let p=document.getElementById('regPass').value;
-  if(u && p){
-    users.push({username:u,password:p,balance:0});
-    alert('تم التسجيل');
+body {
+  background-color: #121212;
+  color: #fff;
+  line-height: 1.5;
+}
+
+header {
+  background: linear-gradient(90deg, #ff3ca6, #000);
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #fff;
+}
+
+.nav button {
+  background: transparent;
+  border: 2px solid #ff3ca6;
+  color: #ff3ca6;
+  padding: 8px 15px;
+  margin-left: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.nav button:hover {
+  background: #ff3ca6;
+  color: #000;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+.panel {
+  background-color: #1e1e1e;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+}
+
+.authGrid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.authGrid div {
+  flex: 1;
+  min-width: 250px;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0 15px 0;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background-color: #2a2a2a;
+  color: #fff;
+}
+
+input::placeholder {
+  color: #aaa;
+}
+
+.btn {
+  background: #ff3ca6;
+  border: none;
+  color: #000;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  background: #fff;
+  color: #ff3ca6;
+}
+
+.btn.muted {
+  background: #555;
+  color: #ccc;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.services {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.service-card {
+  background: #2a2a2a;
+  border-radius: 15px;
+  padding: 15px;
+  transition: 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 15px #ff3ca6;
+}
+
+.service-card img {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 10px;
+}
+
+.service-card h4 {
+  margin-bottom: 5px;
+}
+
+.service-card p {
+  font-size: 0.9em;
+  color: #ccc;
+  margin-bottom: 5px;
+}
+
+.invoice, .paymentBox {
+  background: #2a2a2a;
+  padding: 15px;
+  border-radius: 12px;
+  margin-top: 15px;
+}
+
+footer {
+  text-align: center;
+  padding: 15px 0;
+  background-color: #1a1a1a;
+  border-top: 2px solid #ff3ca6;
+  margin-top: 20px;
+  border-radius: 0 0 15px 15px;
   }
-}
-
-function loginUser(){
-  let u=document.getElementById('loginUser').value;
-  let p=document.getElementById('loginPass').value;
-  let user=users.find(x=>x.username===u && x.password===p);
-  if(user){currentUser=user;alert('تم الدخول');showSection('order');}
-  else alert('بيانات غير صحيحة');
-}
-
-function logout(){currentUser=null;showSection('authSection');}
-
-function showAdminLogin(){
-  showSection('adminLoginSection');
-}
-
-function loginAdmin(){
-  let u=document.getElementById('adminUser').value;
-  let p=document.getElementById('adminPass').value;
-  if(u==='baha' && p==='baha2007'){alert('مرحبا أدمن');showSection('order');}
-  else alert('بيانات الأدمين غير صحيحة');
-}
-
-function verifyTopup(){
-  let id=document.getElementById('topupOrderID').value;
-  if(id==='12345'){document.getElementById('paymentBox').style.display='block';document.getElementById('payID').innerText='PAY123';document.getElementById('payAmount').innerText='10';document.getElementById('payMethod').innerText='Binance';}
-  else alert('رقم الطلب غير صحيح');
-}
-
-function copyPayID(){navigator.clipboard.writeText(document.getElementById('payID').innerText);}
