@@ -1,7 +1,6 @@
 <?php
 session_start();
-include 'config.php';
-include 'db.php';
+include 'config.php'; // إعدادات قاعدة البيانات
 
 $user_logged_in = isset($_SESSION['user_id']);
 $message = '';
@@ -62,20 +61,15 @@ if(isset($_POST['order'])){
     $quantity = $_POST['quantity'];
     $details = $_POST['details'];
     $txid = $_POST['txid'];
-
-    // جلب سعر الخدمة
-    $service_price = $_POST['service_price']; // نرسل السعر مباشرة من القائمة
+    $service_price = $_POST['service_price'];
     $total_price = $quantity * $service_price;
 
-    // جلب رصيد المستخدم
     $user = $conn->query("SELECT balance FROM users WHERE id=$user_id")->fetch_assoc();
 
     if($user['balance'] < $total_price){
         $error = "رصيدك غير كافي!";
     } else {
-        // خصم الرصيد
         $conn->query("UPDATE users SET balance = balance - $total_price WHERE id=$user_id");
-        // إنشاء الطلب
         $stmt = $conn->prepare("INSERT INTO orders (user_id,service_id,quantity,details,txid,status) VALUES (?,?,?,?,?,?)");
         $status = 'pending';
         $stmt->bind_param("iisiss",$user_id,$service_id,$quantity,$details,$txid,$status);
@@ -84,7 +78,7 @@ if(isset($_POST['order'])){
     }
 }
 
-// قائمة 50 خدمة تقريبية
+// قائمة 50 خدمة نموذجية
 $services_list = [
 ['name'=>'زيادة متابعين Instagram','description'=>'زيادة عدد المتابعين الحقيقيين','price'=>5],
 ['name'=>'زيادة لايكات Facebook','description'=>'زيادة اللايكات على منشورك بسرعة','price'=>3],
@@ -93,12 +87,11 @@ $services_list = [
 ['name'=>'زيادة مشاهدات TikTok','description'=>'زيادة المشاهدات على الفيديو','price'=>2],
 ['name'=>'رفع تقييم Google','description'=>'زيادة تقييم موقعك على Google','price'=>6],
 ['name'=>'زيادة مشتركين Telegram','description'=>'زيادة عدد المشتركين للقناة','price'=>4],
-['name'=>'زيادة مشاهدات Instagram Reel','description'=>'زيادة مشاهدات الفيديوهات','price'=>3],
+['name'=>'زيادة مشاهدات Instagram Reel','description'=>'زيادة المشاهدات على الفيديوهات','price'=>3],
 ['name'=>'تعليقات YouTube تلقائية','description'=>'زيادة التعليقات على فيديوهاتك','price'=>5],
 ['name'=>'اشتراكات Newsletter','description'=>'زيادة عدد المشتركين','price'=>2],
-// ... استمر حتى تصل 50 خدمة
+// أضف بقية الخدمات حتى تصل إلى 50 بنفس النمط
 ];
-
 ?>
 
 <!DOCTYPE html>
@@ -148,7 +141,6 @@ footer { background:#222; text-align:center; padding:10px; margin-top:20px; }
 <?php if($message) echo "<p class='success'>$message</p>"; ?>
 
 <?php if(!$user_logged_in): ?>
-<!-- تسجيل الدخول -->
 <section id="login">
 <h2>تسجيل الدخول</h2>
 <form method="POST">
@@ -169,7 +161,6 @@ footer { background:#222; text-align:center; padding:10px; margin-top:20px; }
 </section>
 <?php endif; ?>
 
-<!-- عرض الخدمات -->
 <section id="services">
 <h2>أحدث الخدمات</h2>
 <div class="services-grid">
@@ -183,7 +174,6 @@ footer { background:#222; text-align:center; padding:10px; margin-top:20px; }
 </div>
 </section>
 
-<!-- طلب خدمة -->
 <?php if($user_logged_in): ?>
 <section id="order">
 <h2>طلب خدمة</h2>
@@ -196,34 +186,42 @@ footer { background:#222; text-align:center; padding:10px; margin-top:20px; }
       </option>
     <?php endforeach; ?>
   </select>
-  <input type="hidden" name="service_price" id="service_price" value
-  <?php
-// افتراضياً الخدمات موجودة في قاعدة البيانات، إذا حبيت ممكن نضيفهم كـ array مباشرة
-$services_list = [
-  ['name'=>'زيادة متابعين Instagram','description'=>'زيادة عدد المتابعين الحقيقيين','price'=>5],
-  ['name'=>'زيادة لايكات Facebook','description'=>'زيادة اللايكات على منشورك بسرعة','price'=>3],
-  ['name'=>'زيادة مشاهدة YouTube','description'=>'زيادة المشاهدات على الفيديو','price'=>4],
-  ['name'=>'زيادة متابعين TikTok','description'=>'زيادة المتابعين لحسابك','price'=>5],
-  ['name'=>'زيادة مشاهدات TikTok','description'=>'زيادة المشاهدات على الفيديو','price'=>2],
-  ['name'=>'رفع تقييم Google','description'=>'زيادة تقييم موقعك على Google','price'=>6],
-  ['name'=>'زيادة مشتركين Telegram','description'=>'زيادة عدد المشتركين للقناة','price'=>4],
-  ['name'=>'زيادة مشاهدات Instagram Reel','description'=>'زيادة مشاهدات الفيديوهات','price'=>3],
-  ['name'=>'تعليقات YouTube تلقائية','description'=>'زيادة التعليقات على فيديوهاتك','price'=>5],
-  ['name'=>'اشتراكات Newsletter','description'=>'زيادة عدد المشتركين','price'=>2],
-  // تقدر تزيد حتى توصل 50 خدمة
-];
+  <input type="hidden" name="service_price" id="service_price" value="<?php echo $services_list[0]['price']; ?>">
+  <input type="number" name="quantity" placeholder="الكمية" min="1" required>
+  <textarea name="details" placeholder="تفاصيل الحساب/الرقم" required></textarea>
+  <input type="text" name="txid" placeholder="رقم العملية TxID" required>
+  <button type="submit" name="order">إرسال الطلب</button>
+</form>
 
-// إنشاء جدول في الصفحة
-?>
-<section id="services">
-<h2>أحدث الخدمات</h2>
-<div class="services-grid">
-<?php foreach($services_list as $service): ?>
-  <div class="service-card">
-    <h3><?php echo $service['name']; ?></h3>
-    <p><?php echo $service['description']; ?></p>
-    <p class="price"><?php echo $service['price']; ?> $</p>
-  </div>
-<?php endforeach; ?>
-</div>
+<script>
+const selectService = document.querySelector('select[name="service_id"]');
+const servicePriceInput = document.getElementById('service_price');
+selectService.addEventListener('change', function(){
+    const price = selectService.options[selectService.selectedIndex].getAttribute('data-price');
+    servicePriceInput.value = price;
+});
+</script>
 </section>
+
+<section id="deposit">
+<h2>شحن الرصيد</h2>
+<form method="POST">
+  <input type="number" name="amount" placeholder="المبلغ بالدولار" min="1" required>
+  <select name="method" required>
+    <option value="Payeer">Payeer</option>
+    <option value="Binance">Binance</option>
+  </select>
+  <input type="text" name="txid" placeholder="رقم العملية TxID" required>
+  <button type="submit" name="deposit">إرسال طلب الشحن</button>
+</form>
+</section>
+<?php endif; ?>
+
+</main>
+
+<footer>
+<p>© 2025 Fast10</p>
+</footer>
+
+</body>
+</html>
