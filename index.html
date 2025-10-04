@@ -1,98 +1,0 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>XFollowDZ - موقع الرشق والشحن</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<header>
-  <h1>XFollowDZ</h1>
-  <nav>
-    <a href="#" onclick="showOrder()">الرئيسية</a>
-    <a href="#" onclick="showWallet()">شحن رصيد</a>
-  </nav>
-</header>
-
-<!-- تسجيل حساب -->
-<div class="container" id="registerDiv">
-  <h2>إنشاء حساب</h2>
-  <input type="text" id="regUser" placeholder="اسم المستخدم">
-  <input type="password" id="regPass" placeholder="كلمة المرور">
-  <button onclick="register()">تسجيل</button>
-  <p>لديك حساب؟ <a href="#" onclick="showLogin()">تسجيل الدخول</a></p>
-</div>
-
-<!-- تسجيل دخول -->
-<div class="container" id="loginDiv" style="display:none;">
-  <h2>تسجيل الدخول</h2>
-  <input type="text" id="loginUser" placeholder="اسم المستخدم">
-  <input type="password" id="loginPass" placeholder="كلمة المرور">
-  <button onclick="login()">دخول</button>
-  <p>لا تملك حساب؟ <a href="#" onclick="showRegister()">إنشاء حساب</a></p>
-</div>
-
-<!-- شحن الرصيد -->
-<div class="container" id="walletPage" style="display:none;">
-  <h2>💰 شحن رصيدك</h2>
-  <p class="balance">رصيدك الحالي: <span id="balance">0</span> USDT</p>
-  <input type="number" id="topupAmount" placeholder="المبلغ المراد شحنه" min="1">
-  <select id="topupMethod">
-    <option value="binance">Binance Pay</option>
-    <option value="payeer">Payeer</option>
-    <option value="poste">البريد</option>
-  </select>
-  <button onclick="realTopUp()">شحن الآن</button>
-</div>
-
-<!-- صفحة الطلب -->
-<div class="container" id="orderPage" style="display:none;">
-  <h2>خدمات الرشق والإعلانات</h2>
-
-  <div class="card"><h3>متابعين فيسبوك</h3><span>0.10$ لكل 100</span></div>
-  <div class="card"><h3>لايكات فيسبوك</h3><span>0.05$ لكل 100</span></div>
-  <div class="card"><h3>مشاهدات إنستغرام</h3><span>0.08$ لكل 100</span></div>
-  <div class="card"><h3>مشاهدات TikTok</h3><span>0.12$ لكل 100</span></div>
-  <div class="card"><h3>أعضاء تيلغرام</h3><span>0.10$ لكل عضو</span></div>
-  <div class="card"><h3>مشاهدات يوتيوب</h3><span>0.12$ لكل 100</span></div>
-
-  <p class="balance">رصيدك الحالي: <span id="balanceOrder">0</span> USDT</p>
-
-  <form id="orderForm" onsubmit="sendOrder(event)">
-    <input type="text" id="custName" placeholder="اسمك الكامل" required>
-    <input type="email" id="custEmail" placeholder="بريدك الإلكتروني" required>
-    <select id="serviceSelect" required>
-      <option value="">اختر الخدمة</option>
-      <option value="متابعين فيسبوك">متابعين فيسبوك</option>
-      <option value="لايكات فيسبوك">لايكات فيسبوك</option>
-      <option value="مشاهدات إنستغرام">مشاهدات إنستغرام</option>
-      <option value="مشاهدات TikTok">مشاهدات TikTok</option>
-      <option value="أعضاء تيلغرام">أعضاء تيلغرام</option>
-      <option value="مشاهدات يوتيوب">مشاهدات يوتيوب</option>
-    </select>
-    <select id="quantitySelect" required>
-      <option value="">اختر العدد</option>
-      <option value="100">100</option>
-      <option value="500">500</option>
-      <option value="1000">1000</option>
-      <option value="5000">5000</option>
-      <option value="10000">10000</option>
-    </select>
-
-    <div class="invoice" id="invoice" style="display:none;">
-      <h3>📄 فاتورتك</h3>
-      <p>الخدمة: <span id="invService"></span></p>
-      <p>العدد: <span id="invQuantity"></span></p>
-      <p>السعر للوحدة: <span id="invUnitPrice"></span> $</p>
-      <p>الإجمالي: <span id="invTotal"></span> $</p>
-    </div>
-
-    <button type="submit">إرسال الطلب</button>
-  </form>
-</div>
-
-<script src="script.js"></script>
-</body>
-</html>
