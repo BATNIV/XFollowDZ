@@ -1,164 +1,182 @@
-/* Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+// بيانات مؤقتة للمستخدمين والخدمات (يمكن ربطها بقاعدة بيانات لاحقًا)
+let users = [];
+let currentUser = null;
+let services = [
+  {id:1, category:'فيسبوك', name:'متابعين', desc:'متابعين حقيقيين', quantity:100, price:2},
+  {id:2, category:'إنستغرام', name:'لايكات', desc:'لايكات للصور', quantity:50, price:1.5},
+  {id:3, category:'تيك توك', name:'مشاهدات', desc:'مشاهدات للفيديو', quantity:200, price:3},
+];
 
-body {
-  background-color: #121212;
-  color: #fff;
-  line-height: 1.5;
-}
+// عناصر DOM
+const sections = {
+  auth: document.getElementById('authSection'),
+  order: document.getElementById('orderSection'),
+  wallet: document.getElementById('walletSection'),
+  orders: document.getElementById('ordersSection'),
+  profile: document.getElementById('profileSection'),
+  admin: document.getElementById('adminLoginSection')
+};
 
-header {
-  background: linear-gradient(90deg, #ff3ca6, #000);
-  padding: 15px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+const balanceDisplay = document.getElementById('balanceDisplay');
+const servicesContainer = document.getElementById('servicesContainer');
+const invService = document.getElementById('invService');
+const invQuantity = document.getElementById('invQuantity');
+const invTotal = document.getElementById('invTotal');
+const invoice = document.getElementById('invoice');
+const walletBalance = document.getElementById('walletBalance');
 
-header h1 {
-  font-size: 1.8em;
-  font-weight: bold;
-  color: #fff;
-}
+// تخزين الطلبات
+let currentOrder = [];
+let topups = [];
+let ordersList = [];
 
-.nav button {
-  background: transparent;
-  border: 2px solid #ff3ca6;
-  color: #ff3ca6;
-  padding: 8px 15px;
-  margin-left: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.nav button:hover {
-  background: #ff3ca6;
-  color: #000;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 20px auto;
-  padding: 0 20px;
-}
-
-.panel {
-  background-color: #1e1e1e;
-  padding: 20px;
-  border-radius: 15px;
-  margin-bottom: 20px;
-}
-
-.authGrid {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.authGrid div {
-  flex: 1;
-  min-width: 250px;
-}
-
-input, select {
-  width: 100%;
-  padding: 10px;
-  margin: 8px 0 15px 0;
-  border-radius: 8px;
-  border: 1px solid #333;
-  background-color: #2a2a2a;
-  color: #fff;
-}
-
-input::placeholder {
-  color: #aaa;
-}
-
-.btn {
-  background: #ff3ca6;
-  border: none;
-  color: #000;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
-}
-
-.btn:hover {
-  background: #fff;
-  color: #ff3ca6;
-}
-
-.btn.muted {
-  background: #555;
-  color: #ccc;
-}
-
-.row {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-
-.services {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.service-card {
-  background: #2a2a2a;
-  border-radius: 15px;
-  padding: 15px;
-  transition: 0.3s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.service-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 0 15px #ff3ca6;
-}
-
-.service-card img {
-  width: 60px;
-  height: 60px;
-  margin-bottom: 10px;
-}
-
-.service-card h4 {
-  margin-bottom: 5px;
-}
-
-.service-card p {
-  font-size: 0.9em;
-  color: #ccc;
-  margin-bottom: 5px;
-}
-
-.invoice, .paymentBox {
-  background: #2a2a2a;
-  padding: 15px;
-  border-radius: 12px;
-  margin-top: 15px;
-}
-
-footer {
-  text-align: center;
-  padding: 15px 0;
-  background-color: #1a1a1a;
-  border-top: 2px solid #ff3ca6;
-  margin-top: 20px;
-  border-radius: 0 0 15px 15px;
+// عرض قسم معين
+function showSection(name){
+  for(let sec in sections){
+    sections[sec].style.display = 'none';
   }
+  sections[name].style.display = 'block';
+  if(name === 'order') renderServices();
+  if(name === 'wallet') updateWalletDisplay();
+  if(name === 'orders') renderOrders();
+  if(name === 'profile') renderProfile();
+}
+
+// تسجيل مستخدم جديد
+function registerUser(){
+  const username = document.getElementById('regUser').value.trim();
+  const password = document.getElementById('regPass').value.trim();
+  const phone = document.getElementById('regPhone').value.trim();
+  if(!username || !password) return alert('املأ البيانات كاملة');
+  if(users.find(u=>u.username===username)) return alert('المستخدم موجود');
+  users.push({username,password,phone,balance:0,orders:[],topups:[]});
+  alert('تم إنشاء الحساب بنجاح');
+}
+
+// تسجيل دخول
+function loginUser(){
+  const username = document.getElementById('loginUser').value.trim();
+  const password = document.getElementById('loginPass').value.trim();
+  const user = users.find(u=>u.username===username && u.password===password);
+  if(!user) return alert('بيانات خاطئة');
+  currentUser = user;
+  alert('تم تسجيل الدخول بنجاح');
+  showSection('order');
+}
+
+// تسجيل خروج
+function logout(){
+  currentUser = null;
+  showSection('auth');
+}
+
+// عرض الخدمات
+function renderServices(){
+  servicesContainer.innerHTML = '';
+  services.forEach(s=>{
+    const card = document.createElement('div');
+    card.className = 'service-card';
+    card.innerHTML = `
+      <h4>${s.name}</h4>
+      <p>${s.desc}</p>
+      <p>الكمية: ${s.quantity}</p>
+      <p>السعر: $${s.price}</p>
+      <button class="btn" onclick="addToOrder(${s.id})">اختيار</button>
+    `;
+    servicesContainer.appendChild(card);
+  });
+}
+
+// إضافة خدمة للطلب
+function addToOrder(id){
+  const service = services.find(s=>s.id===id);
+  if(!service) return;
+  currentOrder.push(service);
+  invService.textContent = currentOrder.map(s=>s.name).join(', ');
+  invQuantity.textContent = currentOrder.map(s=>s.quantity).join(', ');
+  invTotal.textContent = currentOrder.reduce((sum,s)=>sum+s.price,0).toFixed(2);
+  invoice.style.display = 'block';
+}
+
+// تأكيد الطلب
+function placeOrder(){
+  if(!currentUser) return alert('سجل الدخول أولاً');
+  const total = currentOrder.reduce((sum,s)=>sum+s.price,0);
+  if(currentUser.balance < total) return alert('رصيدك غير كافي');
+  currentUser.balance -= total;
+  currentUser.orders.push([...currentOrder]);
+  alert('تم تأكيد الطلب');
+  currentOrder = [];
+  invoice.style.display = 'none';
+  updateWalletDisplay();
+}
+
+// تفريغ الطلب
+function clearSelections(){
+  currentOrder = [];
+  invoice.style.display = 'none';
+}
+
+// تحديث عرض الرصيد
+function updateWalletDisplay(){
+  if(currentUser) walletBalance.textContent = currentUser.balance.toFixed(2);
+}
+
+// شحن الرصيد (طلب وهمي لتجربة)
+function makeTopUpRequest(){
+  if(!currentUser) return alert('سجل الدخول أولاً');
+  const amount = parseFloat(document.getElementById('topupAmount').value);
+  const method = document.getElementById('topupMethod').value;
+  if(!amount || !method) return alert('اختر المبلغ والطريقة');
+  const orderID = 'TP'+Math.floor(Math.random()*1000000);
+  topups.push({orderID,amount,method,status:'معلق'});
+  currentUser.topups.push({orderID,amount,method,status:'معلق'});
+  document.getElementById('topupOrderID').textContent = orderID;
+  document.getElementById('payID').textContent = 'PAY'+Math.floor(Math.random()*999999);
+  document.getElementById('paymentBox').style.display='block';
+  alert('تم إنشاء طلب الشحن، استخدم رقم الطلب للدفع');
+}
+
+// نسخ رقم الدفع
+function copyPayID(){
+  const payID = document.getElementById('payID').textContent;
+  navigator.clipboard.writeText(payID);
+  alert('تم نسخ رقم الدفع');
+}
+
+// عرض الطلبات السابقة
+function renderOrders(){
+  const list = document.getElementById('ordersList');
+  list.innerHTML = '';
+  if(!currentUser || !currentUser.orders.length) return list.innerHTML='<p>لا توجد طلبات</p>';
+  currentUser.orders.forEach((ord,i)=>{
+    const div = document.createElement('div');
+    div.className = 'invoice';
+    div.innerHTML = `<h4>طلب #${i+1}</h4><p>${ord.map(s=>s.name).join(', ')}</p>`;
+    list.appendChild(div);
+  });
+}
+
+// عرض حساب
+function renderProfile(){
+  if(!currentUser) return;
+  document.getElementById('profileName').textContent = currentUser.username;
+  document.getElementById('profileBal').textContent = currentUser.balance.toFixed(2);
+}
+
+// إدارة الأدمن (تجريبي)
+function showAdminLogin(){
+  showSection('admin');
+}
+
+function closeAdminLogin(){
+  showSection('auth');
+}
+
+function loginAdmin(){
+  const user = document.getElementById('adminUser').value;
+  const pass = document.getElementById('adminPass').value;
+  if(user==='baha' && pass==='baha2007'){
+    alert('تم تسجيل الدخول كأدمين');
+  } else alert('بيانات خاطئة');
+                          }
